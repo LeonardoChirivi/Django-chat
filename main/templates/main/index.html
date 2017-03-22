@@ -1,0 +1,17 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="container">
+    <form class="form-signin" action="{% url 'login' %}" method="post">{% csrf_token %}
+        <h2 class="form-signin-heading">Log in to chat</h2>
+        <label class="sr-only">Username</label>
+        <input type="text" name="username" class="form-control" placeholder="Username" required autofocus>
+        <label class="sr-only">Password</label>
+        <input type="password" name="password" id="logpwd" class="form-control" placeholder="Password" required>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Log in</button>
+        <a href="{% url 'signup' %}">Not a member?</a>
+    </form>
+</div> <!-- /container -->
+{% endblock %}
