@@ -3,13 +3,13 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 
 class Login(View):
     """Main view that login in every user before start chatting."""
     def get(self, request):
-        """Return login page or the chat page if
-        user is already logged in"""
+        """Return login page or the chat page if user is already logged in"""
         if request.user.is_authenticated():
             context = {
                 'user': request.user.username
@@ -41,23 +41,15 @@ class Register(View):
         return render(request, 'main/register.html')
 
     def post(self, request):
-        """Add user to users"""
-        firstname = request.POST['firstname']
-        lastname = request.POST['lastname']
-        username = request.POST['username']
-        password = request.POST['password']
-        email = request.POST['email']
-
-        user = User(first_name=firstname, last_name=lastname,
-                    username=username, email=email)
-        user.set_password(password)
+        """Add user to users, login and redirect to chat page"""
+        user = User.objects.create_user(request.POST['username'],
+                                        request.POST['email'],
+                                        request.POST['password'])
+        user.first_name = request.POST['firstname']
+        user.last_name = request.POST['lastname']
         user.save()
-        user = authenticate(username=username, password=password)
         login(request, user)
-        context = {
-            'user': username
-        }
-        return render(request, 'main/chat.html', context)
+        return HttpResponseRedirect(reverse('login'))
 
 
 def log_out(request):
