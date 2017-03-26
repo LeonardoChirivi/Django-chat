@@ -5,16 +5,15 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.urls import reverse
 
+from models import Message
+
 
 class Login(View):
     """Main view that login in every user before start chatting."""
     def get(self, request):
         """Return login page or the chat page if user is already logged in"""
         if request.user.is_authenticated():
-            context = {
-                'user': request.user.username
-            }
-            return render(request, 'main/chat.html', context)
+            return HttpResponseRedirect(reverse('chat'))
         else:
             return render(request, 'main/index.html')
 
@@ -26,10 +25,7 @@ class Login(View):
 
         if user is not None:
             login(request, user)
-            context = {
-                'user': username
-            }
-            return render(request, 'main/chat.html', context)
+            return HttpResponseRedirect(reverse('chat'))
         else:
             return HttpResponse('wrong username or password')
 
@@ -50,6 +46,18 @@ class Register(View):
         user.save()
         login(request, user)
         return HttpResponseRedirect(reverse('login'))
+
+
+class Chat(View):
+    def get(self, request):
+        messages = Message.objects.all()
+        context = {
+            'user': request.user.username,
+        }
+        return render(request, 'main/chat.html', context)
+
+    def post(self, request):
+        return HttpResponse('ok')
 
 
 def log_out(request):

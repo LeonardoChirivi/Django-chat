@@ -5,4 +5,5 @@ urlpatterns = [
     url(r'^$', views.Login.as_view(), name='login'),
     url(r'^register$', views.Register.as_view(), name='signup'),
     url(r'^logout', views.log_out, name='logout'),
+    url(r'^chat', views.Chat.as_view(), name='chat'),
 ]

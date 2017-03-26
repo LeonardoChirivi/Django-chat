@@ -3,6 +3,21 @@
 {% block title %}Chat{% endblock %}
 
 {% block content %}
-<h1>welcome {{ user }}</h1>
-<a href="{% url 'logout' %}">Log out</a>
+<nav class="navbar navbar-default navbar-fixed-bottom">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-1">
+                <button type="button" class="btn"><a href="{% url 'logout' %}">Logout</a></button>
+            </div>
+            <div class="col-md-11">
+                <form action="{% url 'chat' %}" method="post">{% csrf_token %}
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Type message" aria-describedby="basic-addon2" autofocus>
+                        <span class="input-group-addon" id="basic-addon2">Send</span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> <!--Container-->
+</nav>
 {% endblock %}
